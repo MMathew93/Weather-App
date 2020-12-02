@@ -18,7 +18,7 @@ https://locationiq.com/
 https://openweathermap.org/
 
 ## Hosted Demo
-[Hosted on Heroku](https://weather-app-odin-vue.herokuapp.com/)!
+[Hosted on Heroku](https://weather-app-odin.herokuapp.com/)!
 
 ## Project setup
 ```
