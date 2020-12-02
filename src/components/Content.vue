@@ -36,7 +36,8 @@
           <span class="slider round"></span>
         </label>
         <div class="info-row">
-          {{ maxTemp + String.fromCharCode(176)}}  / {{ minTemp + String.fromCharCode(176) }} | Real Feel {{ feelsLike + String.fromCharCode(176) }}
+          {{ maxTemp + String.fromCharCode(176)}} / {{ minTemp + String.fromCharCode(176) }} | Real Feel
+          {{ feelsLike + String.fromCharCode(176) }}
         </div>
         <br>
         <div class="weather">
@@ -58,11 +59,14 @@
     name: 'Content',
     data() {
       return {
+        weatherApi: process.env.VUE_APP_WEATHER_API,
+        geolocationApi: process.env.VUE_APP_GEO_API,
         longitude: null,
         latitude: null,
         postalCode: '',
         state: '',
         gettingLocation: false,
+        city: null,
         name: null,
         mainTemp: '',
         metric: String.fromCharCode(176) + 'F',
@@ -103,7 +107,7 @@
       async getGeoLocation() {
         try {
           const reverseGeo = await fetch(
-            `https://us1.locationiq.com/v1/reverse.php?key={ location api key here }&lat=${this.latitude}&lon=${this.longitude}&format=json`, {
+            `https://us1.locationiq.com/v1/reverse.php?key=${this.geolocationApi}&lat=${this.latitude}&lon=${this.longitude}&format=json`, {
               mode: 'cors'
             });
           const zipCode = await reverseGeo.json();
@@ -116,11 +120,12 @@
       async getWeatherData() {
         try {
           const response = await fetch(
-            `http://api.openweathermap.org/data/2.5/weather?q=${this.userSearch}&zip=${this.postalCode}&units=imperial&appid={ open weather api here }`, {
+            `http://api.openweathermap.org/data/2.5/weather?q=${this.userSearch}&zip=${this.postalCode}&units=imperial&appid=${this.weatherApi}`, {
               mode: 'cors'
             });
           const weatherData = await response.json();
-          this.name = weatherData.name + ', ' + this.state
+          console.log(weatherData)
+          this.city = weatherData.name
           this.mainTemp = Math.round(weatherData.main.temp)
           this.maxTemp = Math.round(weatherData.main.temp_max)
           this.minTemp = Math.round(weatherData.main.temp_min)
@@ -139,14 +144,14 @@
       async getWeather() {
         let geoData = await this.getGeoLocation()
         let weatherData = await this.getWeatherData()
+        this.name = this.city + ', ' + this.state
         return geoData, weatherData
       },
       async getUserWeather() {
-        let [someResult, anotherResult] = await Promise.all([this.getGeoLocation(), this.getWeatherData()]);
-        return console.log([someResult, anotherResult])
-        //let weatherData= await this.getWeatherData()
-        //let geoData= await this.getGeoLocation()
-        //return geoData, weatherData
+        let weatherData = await this.getWeatherData()
+        let geoData = await this.getGeoLocation()
+        this.name = this.city + ', ' + this.state
+        return geoData, weatherData
       },
       today(date) {
         return moment(date).format('ddd' + ', ' + 'MMM' + ' ' + 'DD' + ' ' + 'h' + ':' + 'mm' + 'a')
@@ -165,18 +170,18 @@
         this.isOpen = !this.isOpen
       },
       convert() {
-        if(this.checked == true) {
-          this.metric= String.fromCharCode(176) + 'C'
-          this.mainTemp= Math.round((this.mainTemp - 32) * 5 / 9)
-          this.maxTemp= Math.round((this.maxTemp - 32) * 5 / 9)
-          this.minTemp= Math.round((this.minTemp - 32) * 5 / 9)
-          this.feelsLike= Math.round((this.feelsLike - 32) * 5 / 9)
+        if (this.checked == true) {
+          this.metric = String.fromCharCode(176) + 'C'
+          this.mainTemp = Math.round((this.mainTemp - 32) * 5 / 9)
+          this.maxTemp = Math.round((this.maxTemp - 32) * 5 / 9)
+          this.minTemp = Math.round((this.minTemp - 32) * 5 / 9)
+          this.feelsLike = Math.round((this.feelsLike - 32) * 5 / 9)
         } else {
           this.metric = String.fromCharCode(176) + 'F'
           this.mainTemp = Math.round((this.mainTemp * 9 / 5) + 32)
           this.maxTemp = Math.round((this.maxTemp * 9 / 5) + 32)
-          this.minTemp= Math.round((this.minTemp * 9 / 5) + 32)
-          this.feelsLike= Math.round((this.feelsLike * 9 / 5) + 32)
+          this.minTemp = Math.round((this.minTemp * 9 / 5) + 32)
+          this.feelsLike = Math.round((this.feelsLike * 9 / 5) + 32)
         }
       }
     }
