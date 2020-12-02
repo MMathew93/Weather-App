@@ -9,12 +9,12 @@ geolocation.
 
 
 ## Tech/framework used
-Vue 2
+Vue 2  
 Javascript
 
 
 ## API Reference
-https://locationiq.com/
+https://locationiq.com/  
 https://openweathermap.org/
 
 ## Project setup
