@@ -17,6 +17,9 @@ Javascript
 https://locationiq.com/  
 https://openweathermap.org/
 
+## Hosted Demo
+[Hosted on Heroku](https://weather-app-odin-vue.herokuapp.com/)!
+
 ## Project setup
 ```
 npm install
