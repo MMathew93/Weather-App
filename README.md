@@ -20,6 +20,11 @@ https://openweathermap.org/
 ## Hosted Demo
 [Hosted on Heroku](https://weather-app-odin.herokuapp.com/)!
 
+
+## Demo
+![](weatherapp_demo.gif)
+
+
 ## Project setup
 ```
 npm install
